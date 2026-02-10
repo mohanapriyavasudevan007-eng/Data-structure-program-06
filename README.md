@@ -1,90 +1,46 @@
-# Data-structure-program-06# Binary Search Tree Operations
+# Data-structure-program-06#arr = [170, 45, 75, 90, 802, 24, 2, 66]
 
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.left = None
-        self.right = None
+# Bubble Sort
+a = arr.copy()
+for i in range(len(a)):
+    for j in range(len(a)-1):
+        if a[j] > a[j+1]:
+            a[j], a[j+1] = a[j+1], a[j]
+print("Bubble Sort:", a)
 
-def insert(root, data):
-    if root is None:
-        return Node(data)
-    if data < root.data:
-        root.left = insert(root.left, data)
-    elif data > root.data:
-        root.right = insert(root.right, data)
-    return root
+# Selection Sort
+a = arr.copy()
+for i in range(len(a)):
+    min_i = i
+    for j in range(i+1, len(a)):
+        if a[j] < a[min_i]:
+            min_i = j
+    a[i], a[min_i] = a[min_i], a[i]
+print("Selection Sort:", a)
 
-def search(root, key):
-    if root is None:
-        return False
-    if root.data == key:
-        return True
-    elif key < root.data:
-        return search(root.left, key)
-    else:
-        return search(root.right, key)
+# Insertion Sort
+a = arr.copy()
+for i in range(1, len(a)):
+    key = a[i]
+    j = i - 1
+    while j >= 0 and key < a[j]:
+        a[j+1] = a[j]
+        j -= 1
+    a[j+1] = key
+print("Insertion Sort:", a)
 
-def find_min(root):
-    while root.left is not None:
-        root = root.left
-    return root
+# Radix Sort
+a = arr.copy()
+exp = 1
+max_num = max(a)
 
-def delete(root, key):
-    if root is None:
-        return root
-    if key < root.data:
-        root.left = delete(root.left, key)
-    elif key > root.data:
-        root.right = delete(root.right, key)
-    else:
-        if root.left is None:
-            return root.right
-        elif root.right is None:
-            return root.left
-        temp = find_min(root.right)
-        root.data = temp.data
-        root.right = delete(root.right, temp.data)
-    return root
+while max_num // exp > 0:
+    buckets = [[] for _ in range(10)]
+    for num in a:
+        buckets[(num // exp) % 10].append(num)
+    a = []
+    for b in buckets:
+        a.extend(b)
+    exp *= 10
 
-def inorder(root):
-    if root:
-        inorder(root.left)
-        print(root.data, end=" ")
-        inorder(root.right)
-
-root = None
-
-while True:
-    print("\n--- Binary Search Tree Operations ---")
-    print("1. Insert")
-    print("2. Search")
-    print("3. Delete")
-    print("4. Display (Inorder)")
-    print("5. Exit")
-
-    choice = int(input("Enter your choice: "))
-
-    if choice == 1:
-        val = int(input("Enter value to insert: "))
-        root = insert(root, val)
-        print("Element inserted.")
-    elif choice == 2:
-        val = int(input("Enter value to search: "))
-        if search(root, val):
-            print("Element found in BST.")
-        else:
-            print("Element not found.")
-    elif choice == 3:
-        val = int(input("Enter value to delete: "))
-        root = delete(root, val)
-        print("Element deleted (if present).")
-    elif choice == 4:
-        print("BST elements (Inorder):")
-        inorder(root)
-        print()
-    elif choice == 5:
-        print("Exiting program.")
-        break
-    else:
-        print("Invalid choice.")
+print("Radix Sort:", a)
